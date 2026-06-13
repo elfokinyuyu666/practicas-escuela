@@ -92,7 +92,7 @@ if st.session_state.running:
     if len(cola.cola) > 0:
         atendido = cola.atender_paciente()
 
-        st.success(f"👤 Atendiendo: {atendido.get__nombre()}")
+        st.success(f"👤 Atendiendo: {atendido.get_nombre()}")
         st.write("🤒", atendido.padecimiento)
         st.write("👨‍⚕️", atendido.medico.nombre)
         st.write("🏥", atendido.medico.consultorio)
