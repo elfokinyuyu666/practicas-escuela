@@ -1,6 +1,6 @@
 class Persona:
 
-    def __init__(self):
+    def _init_(self):
         self.__nombre=""
         self.__edad=0
         self.__sexo=""
