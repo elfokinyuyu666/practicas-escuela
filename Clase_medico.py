@@ -1,5 +1,4 @@
 from Clase_persona import Persona
-
 class Medico(Persona):
 
     def __init__(self, nombre, edad, sexo, telefono, correo,
