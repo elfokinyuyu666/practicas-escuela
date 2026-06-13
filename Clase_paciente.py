@@ -3,10 +3,10 @@ from Clase_persona import Persona
 
 class Paciente(Persona):
 
-    def __init__(self, nombre, edad, sexo, telefono, correo,
+    def _init_(self, nombre, edad, sexo, telefono, correo,
                  peso, altura, padecimiento, medico=None):
 
-        super().__init__()
+        super()._init_()
 
         self.set__nombre(nombre)
         self.set__edad(edad)
@@ -17,13 +17,12 @@ class Paciente(Persona):
         self.peso = peso
         self.altura = altura
         self.padecimiento = padecimiento
-        self.medico = medico
+        self.medico = medico       # Guarda al médico correctamente
         self.consultorio = None
-        self.medico = None
 
     def calcular_imc(self):
-            imc = self.peso / (self.altura ** 2)
-            return imc
+        imc = self.peso / (self.altura ** 2)
+        return imc
 
     def mostrar_datos(self):
         print("=== DATOS DEL PACIENTE ===")
