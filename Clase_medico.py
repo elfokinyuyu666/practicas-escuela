@@ -7,7 +7,7 @@ class Medico(Persona):
 
         super().__init__()
 
-        self.set_nombre(nombre)
+        self.set__nombre(nombre)
         self.set__edad(edad)
         self.set__sexo(sexo)
         self.set__telefono(telefono)
