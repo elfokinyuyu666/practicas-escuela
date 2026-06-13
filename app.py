@@ -111,4 +111,4 @@ if len(cola.cola) == 0:
     st.info("Sin pacientes en cola")
 else:
     for i, p in enumerate(cola.cola, 1):
-        st.write(f"{i}. {p.get__nombre()} - {p.padecimiento}")t__nombre()} - {p.padecimiento}")
+        st.write(f"{i}. {p.get__nombre()} - {p.padecimiento}")
