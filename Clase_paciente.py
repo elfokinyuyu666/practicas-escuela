@@ -27,11 +27,11 @@ class Paciente(Persona):
 
     def mostrar_datos(self):
         print("=== DATOS DEL PACIENTE ===")
-        print("Nombre:", self.get__nombre())
-        print("Edad:", self.get__edad())
-        print("Sexo:", self.get__sexo())
-        print("Teléfono:", self.get__telefono())
-        print("Correo:", self.get__correo())
+        print("Nombre:", self.get_nombre())
+        print("Edad:", self.get_edad())
+        print("Sexo:", self.get_sexo())
+        print("Teléfono:", self.get_telefono())
+        print("Correo:", self.get_correo())
         print("Peso:", self.peso)
         print("Altura:", self.altura)
         print("Padecimiento:", self.padecimiento)
