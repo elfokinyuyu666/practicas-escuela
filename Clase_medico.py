@@ -2,10 +2,10 @@ from Clase_persona import Persona
 
 class Medico(Persona):
 
-    def _init_(self, nombre, edad, sexo, telefono, correo,
+    def __init__(self, nombre, edad, sexo, telefono, correo,
                  especialidad, consultorio, num_empleado):
 
-        super()._init_()
+        super().__init__()
 
         self.set__nombre(nombre)
         self.set__edad(edad)
