@@ -5,7 +5,7 @@ class Medico(Persona):
     def __init__(self, nombre, edad, sexo, telefono, correo,
                  especialidad, consultorio, num_empleado):
 
-        super().__init__()
+        super().__init__(nombre, edad, espcialidad, consultorio)
 
         self.set__nombre(nombre)
         self.set__edad(edad)
