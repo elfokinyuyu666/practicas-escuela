@@ -19,7 +19,7 @@ class Medico(Persona):
 
     def mostrar_datos(self):
         print("===== DATOS DEL MÉDICO =====")
-        print("Nombre:", self.get__nombre())
+        print("Nombre:", self.get_nombre())
         print("Edad:", self.get__edad())
         print("Sexo:", self.get__sexo())
         print("Teléfono:", self.get__telefono())
