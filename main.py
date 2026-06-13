@@ -1,5 +1,5 @@
-from clase_paciente import Paciente
-from clase_medico import Medico
+from Clase_paciente import Paciente
+from Clase_medico import Medico
 from cola_consultorio import ColaConsultorio
 import random
 
@@ -125,5 +125,6 @@ if paciente_atendido:
 
 
 # sale la cola actualizada despues de atender al paciente
-print("\n===== COLA ACTUAL =====")
+print("\n===== COLA VACIA =====")
+cola.iniciar_simulacion()
 cola.iniciar_simulacion()
