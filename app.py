@@ -94,7 +94,7 @@ if st.session_state.running:
 
         st.success(f"👤 Atendiendo: {atendido.get__nombre()}")
         st.write("🤒", atendido.padecimiento)
-        st.write("👨‍⚕️", atendido.medico.get__nombre())
+        st.write("👨‍⚕️", atendido.medico.get_nombre())
         st.write("🏥", atendido.medico.consultorio)
         st.write("⚖️ IMC:", round(atendido.calcular_imc(), 2))
 
