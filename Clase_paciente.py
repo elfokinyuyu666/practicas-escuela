@@ -1,5 +1,5 @@
 import time
-from clase_persona import Persona
+from Clase_persona import Persona
 
 class Paciente(Persona):
 
