@@ -1,38 +1,38 @@
 class Persona:
 
     def __init__(self):
-        self.__nombre=""
-        self.__edad=0
-        self.__sexo=""
-        self.__telefono=""
-        self.__correo=""
+        self.__nombre = ""
+        self.__edad = 0
+        self.__sexo = ""
+        self.__telefono = ""
+        self.__correo = ""
 
-    def set__nombre(self,no):
-        self.__nombre=no
- 
-    def set__edad(self,e):
-        self.__edad=e
+    def set_nombre(self, no):
+        self.__nombre = no
 
-    def set__sexo(self,s):
-        self.__sexo=s
+    def set_edad(self, e):
+        self.__edad = e
 
-    def set__telefono(self,t):
-        self.__telefono=t
+    def set_sexo(self, s):
+        self.__sexo = s
 
-    def set__correo(self,co):
-        self.__correo=co
+    def set_telefono(self, t):
+        self.__telefono = t
 
-    def get__nombre(self):
+    def set_correo(self, co):
+        self.__correo = co
+
+    def get_nombre(self):
         return self.__nombre
 
-    def get__edad(self):
+    def get_edad(self):
         return self.__edad
 
-    def get__sexo(self):
+    def get_sexo(self):
         return self.__sexo
 
-    def get__telefono(self):
+    def get_telefono(self):
         return self.__telefono
-    
-    def get__correo(self):
+
+    def get_correo(self):
         return self.__correo
