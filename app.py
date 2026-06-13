@@ -1,6 +1,11 @@
 import streamlit as st
 import time
 import random
+import sys
+import os
+
+# Asegura que Streamlit Cloud encuentre tus archivos locales de clases
+sys.path.append(os.path.dirname(os.path.abspath(_file_)))
 
 from Clase_paciente import Paciente
 from Clase_medico import Medico
