@@ -92,9 +92,9 @@ if st.session_state.running:
     if len(cola.cola) > 0:
         atendido = cola.atender_paciente()
 
-        st.success(f"👤 Atendiendo: {atendido.get_nombre()}")
+        st.success(f"👤 Atendiendo: {atendido.get__nombre()}")
         st.write("🤒", atendido.padecimiento)
-        st.write(dir(atendido.medico))
+        st.write("👨‍⚕️", atendido.medico.get__nombre())
         st.write("🏥", atendido.medico.consultorio)
         st.write("⚖️ IMC:", round(atendido.calcular_imc(), 2))
 
@@ -111,4 +111,4 @@ if len(cola.cola) == 0:
     st.info("Sin pacientes en cola")
 else:
     for i, p in enumerate(cola.cola, 1):
-        st.write(f"{i}. {p.get__nombre()} - {p.padecimiento}")
+        st.write(f"{i}. {p.get__nombre()} - {p.padecimiento}")t__nombre()} - {p.padecimiento}")
