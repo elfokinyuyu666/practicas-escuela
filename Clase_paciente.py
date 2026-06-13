@@ -8,11 +8,11 @@ class Paciente(Persona):
 
         super().__init__()
 
-        self.set__nombre(nombre)
-        self.set__edad(edad)
-        self.set__sexo(sexo)
-        self.set__telefono(telefono)
-        self.set__correo(correo)
+        self.set_nombre(nombre)
+        self.set_edad(edad)
+        self.set_sexo(sexo)
+        self.set_telefono(telefono)
+        self.set_correo(correo)
 
         self.peso = peso
         self.altura = altura
