@@ -28,6 +28,7 @@ class ColaConsultorio:
             print("Padecimiento:", paciente.padecimiento)
             print("Médico asignado:", paciente.medico.get__nombre())
             print("Consultorio:", paciente.medico.consultorio)
+            print("IMC:", round(paciente.calcular_imc(), 2))
 
             print("Consulta terminada...")
             print("Esperando siguiente paciente...")
