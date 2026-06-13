@@ -5,7 +5,7 @@ import sys
 import os
 
 # Asegura que Streamlit Cloud encuentre tus archivos locales de clases
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.path.dirname(os.path.abspath(_file_)))
 
 from Clase_paciente import Paciente
 from Clase_medico import Medico
@@ -115,5 +115,7 @@ st.subheader("📊 Pacientes en espera")
 if len(cola.cola) == 0:
     st.info("Sin pacientes en cola")
 else:
+    for i, p in enumerate(cola.cola, 1):
+        st.write(f"{i}. {p.get__nombre()} - {p.padecimiento}")
     for i, p in enumerate(cola.cola, 1):
         st.write(f"{i}. {p.get__nombre()} - {p.padecimiento}")
