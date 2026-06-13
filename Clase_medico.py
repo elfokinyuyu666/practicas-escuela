@@ -1,4 +1,4 @@
-from clase_persona import Persona
+from Clase_persona import Persona
 
 class Medico(Persona):
 
