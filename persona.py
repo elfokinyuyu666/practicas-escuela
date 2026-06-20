@@ -1,6 +1,6 @@
 class Persona:
 
-    def _init_(self):
+    def __init__(self):
         self.__nombre = ""
         self.__edad = 0
         self.__sexo = ""
@@ -33,6 +33,9 @@ class Persona:
 
     def get__telefono(self):
         return self.__telefono
+
+    def get__correo(self):
+        return self.__correo
 
     def get__correo(self):
         return self.__correo
