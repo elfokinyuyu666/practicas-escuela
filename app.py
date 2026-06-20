@@ -8,18 +8,13 @@ from cola import ColaConsultorio
 
 st.set_page_config(page_title="Consultorio", page_icon="🏥", layout="wide")
 
-st.markdown(
-    "<h1 style='text-align:center;color:#2E86C1;'>🏥 Consultorio Médico</h1>",
-    unsafe_allow_html=True
-)
-
-st.divider()
+st.title("🏥 Simulación de Consultorio Médico")
 
 # -------------------------
 # INICIALIZACIÓN
 # -------------------------
 
-if "cola" not in st.session_state:
+def inicializar():
 
     medicos = [
         Medico("Dr. Carlos Hernández", 45, "M", "3323", "a@a.com", "General", "1", "M1"),
@@ -40,27 +35,43 @@ if "cola" not in st.session_state:
     for p in pacientes:
         cola.agregar_paciente(p)
 
-    st.session_state.cola = cola
-    st.session_state.actual = None
-    st.session_state.atendidos = []
+    return cola
 
-    # control de simulación
+
+# -------------------------
+# SESSION STATE
+# -------------------------
+
+if "cola" not in st.session_state:
+    st.session_state.cola = inicializar()
+    st.session_state.atendidos = []
+    st.session_state.actual = None
     st.session_state.simulacion = False
     st.session_state.last_time = time.time()
 
+
 # -------------------------
-# BOTÓN DE INICIO
+# BOTONES
 # -------------------------
 
-if not st.session_state.simulacion:
+colb1, colb2 = st.columns(2)
 
+with colb1:
     if st.button("▶️ Iniciar simulación"):
-
         st.session_state.simulacion = True
+
+with colb2:
+    if st.button("🔄 Reiniciar simulación"):
+        st.session_state.cola = inicializar()
+        st.session_state.atendidos = []
+        st.session_state.actual = None
+        st.session_state.simulacion = False
+        st.session_state.last_time = time.time()
         st.rerun()
 
+
 # -------------------------
-# SIMULACIÓN AUTOMÁTICA
+# SIMULACIÓN AUTOMÁTICA (NO BLOQUEANTE)
 # -------------------------
 
 if st.session_state.simulacion:
@@ -76,9 +87,12 @@ if st.session_state.simulacion:
         st.session_state.last_time = time.time()
         st.rerun()
 
+
 # -------------------------
-# DASHBOARD
+# UI
 # -------------------------
+
+st.divider()
 
 col1, col2, col3 = st.columns(3)
 
@@ -91,7 +105,6 @@ if st.session_state.actual:
 
 col3.metric("🏥 Consultorio", consultorio)
 
-st.divider()
 
 # -------------------------
 # PACIENTE ACTUAL
@@ -114,6 +127,7 @@ if st.session_state.actual:
             <h3>{p.get__nombre()}</h3>
             <p><b>Padecimiento:</b> {p.padecimiento}</p>
             <p><b>Médico:</b> {p.medico.get__nombre()}</p>
+            <p><b>Consultorio:</b> {p.medico.consultorio}</p>
         </div>
         """,
         unsafe_allow_html=True
@@ -122,7 +136,8 @@ if st.session_state.actual:
     st.success(f"📊 IMC: {round(p.calcular_imc(), 2)}")
 
 else:
-    st.info("Aún no hay paciente en atención")
+    st.info("No hay paciente en atención")
+
 
 # -------------------------
 # SALA DE ESPERA
@@ -130,13 +145,17 @@ else:
 
 st.subheader("🪑 Sala de espera")
 
-for p in st.session_state.cola.cola:
-    st.write(f"🧑‍⚕️ {p.get__nombre()} — {p.padecimiento}")
+if len(st.session_state.cola.cola) > 0:
+    for p in st.session_state.cola.cola:
+        st.write(f"🧑‍⚕️ {p.get__nombre()} — {p.padecimiento}")
+else:
+    st.success("✔ Sala de espera vacía")
+
 
 # -------------------------
 # HISTORIAL
 # -------------------------
 
-st.subheader("📋 Atendidos")
+st.subheader("📋 Historial de atención")
 
 st.write(st.session_state.atendidos)
