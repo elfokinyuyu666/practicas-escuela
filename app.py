@@ -1,167 +1,223 @@
 import streamlit as st
-import time
+from streamlit_autorefresh import st_autorefresh
 import random
+import pandas as pd
 
 from Clase_paciente import Paciente
 from Clase_medico import Medico
-from cola_consultorio import ColaConsultorio
 
+st.set_page_config(
+    page_title="Consultorio Médico",
+    page_icon="🏥",
+    layout="wide"
+)
 
-st.set_page_config(page_title="Simulador Consultorio", layout="centered")
-st.title("🏥 SIMULADOR DE CONSULTORIO EN TIEMPO REAL")
+# Actualizar cada 5 segundos
+contador = st_autorefresh(interval=5000, key="consultorio")
 
+st.title("🏥 Sistema de Atención Médica")
 
-# =========================
-# MÉDICOS
-# =========================
-medicos = [
-    Medico(
-        "Dr. Carlos Hernández",
+# ==========================
+# Inicializar datos
+# ==========================
+
+if "iniciado" not in st.session_state:
+
+    medico1 = Medico(
+        "Dr. Carlos Hernandez",
         45,
         "Masculino",
         "3323675090",
         "hernandez@tusalud.com",
-        "General",
-        "1",
+        "Medicina General",
+        "Consultorio 1",
         "M001"
-    ),
-    Medico(
-        "Dra. Ana López",
+    )
+
+    medico2 = Medico(
+        "Dra. Ana Lopez",
         38,
         "Femenino",
         "3340756321",
-        "anita@hospital.com",
+        "anitalopez@hospital.com",
         "Pediatría",
-        "2",
+        "Consultorio 2",
         "M002"
-    ),
-    Medico(
-        "Dr. Pedro Hernández",
+    )
+
+    medico3 = Medico(
+        "Dr. Pedro Hernandez",
         50,
         "Masculino",
         "3315233297",
-        "pedro@hospital.com",
+        "pedrinhernandez@tusalud.com",
         "Cardiología",
-        "3",
+        "Consultorio 3",
         "M003"
     )
-]
 
+    medicos = [medico1, medico2, medico3]
 
-# =========================
-# ESTADO GLOBAL
-# =========================
-if "cola" not in st.session_state:
-    st.session_state.cola = ColaConsultorio()
+    pacientes = [
 
-if "running" not in st.session_state:
-    st.session_state.running = False
+        Paciente(
+            "Jonathan Gutierrez",
+            25,
+            "Masculino",
+            "3311411497",
+            "jona060@gmail.com",
+            80,
+            1.75,
+            "Gripe"
+        ),
 
-cola = st.session_state.cola
+        Paciente(
+            "Christian Casas",
+            20,
+            "Masculino",
+            "3355555555",
+            "christian@gmail.com",
+            60,
+            1.65,
+            "Migraña"
+        ),
 
+        Paciente(
+            "Alexis Pimentel",
+            32,
+            "Masculino",
+            "3366666666",
+            "alexis@gmail.com",
+            90,
+            1.80,
+            "Dolor muscular"
+        )
+    ]
 
-# =========================
-# DATOS PARA PACIENTES
-# =========================
-nombres = [
-    "Juan",
-    "Ana",
-    "Luis",
-    "María",
-    "Pedro",
-    "Sofía",
-    "Carlos",
-    "Elena"
-]
+    for paciente in pacientes:
+        paciente.medico = random.choice(medicos)
 
-padecimientos = [
-    "Gripe",
-    "Migraña",
-    "Dolor muscular",
-    "Fiebre",
-    "Infección"
-]
+    st.session_state.cola = pacientes
+    st.session_state.atendidos = []
+    st.session_state.paciente_actual = None
+    st.session_state.iniciado = True
 
+# ==========================
+# Atención automática
+# ==========================
 
-# =========================
-# GENERAR PACIENTE
-# =========================
-def generar_paciente():
-    nombre = random.choice(nombres)
-    edad = random.randint(18, 60)
-    sexo = random.choice(["Masculino", "Femenino"])
-    telefono = "33" + str(random.randint(10000000, 99999999))
-    correo = f"{nombre.lower()}@mail.com"
-    peso = random.randint(50, 90)
-    altura = round(random.uniform(1.55, 1.85), 2)
-    padecimiento = random.choice(padecimientos)
-    medico = random.choice(medicos)
+if len(st.session_state.cola) > 0:
 
-    return Paciente(
-        nombre,
-        edad,
-        sexo,
-        telefono,
-        correo,
-        peso,
-        altura,
-        padecimiento,
-        medico
+    paciente = st.session_state.cola.pop(0)
+
+    st.session_state.paciente_actual = paciente
+
+    st.session_state.atendidos.append(
+        paciente.get__nombre()
     )
 
+# ==========================
+# Indicadores
+# ==========================
 
-# =========================
-# CONTROLES
-# =========================
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    if st.button("▶️ Iniciar simulador"):
-        st.session_state.running = True
+    st.metric(
+        "Pacientes en espera",
+        len(st.session_state.cola)
+    )
 
 with col2:
-    if st.button("⏸️ Pausar"):
-        st.session_state.running = False
+    st.metric(
+        "Pacientes atendidos",
+        len(st.session_state.atendidos)
+    )
 
 with col3:
-    if st.button("🔄 Reiniciar"):
-        st.session_state.cola = ColaConsultorio()
-        st.session_state.running = False
-        st.rerun()
-
-
-# =========================
-# SIMULACIÓN
-# =========================
-st.subheader("⚙️ Estado del sistema")
-
-if st.session_state.running:
-
-    nuevo = generar_paciente()
-    cola.agregar_paciente(nuevo)
-
-    if len(cola.cola) > 0:
-        atendido = cola.atender_paciente()
-
-        st.success(f"👤 Atendiendo: {atendido.get__nombre()}")
-        st.write("🤒 Padecimiento:", atendido.padecimiento)
-        st.write("👨‍⚕️ Médico:", atendido.medico.get__nombre())
-        st.write("🏥 Consultorio:", atendido.medico.consultorio)
-        st.write("⚖️ IMC:", round(atendido.calcular_imc(), 2))
-
-    time.sleep(2)
-    st.rerun()
-
-
-# =========================
-# COLA DE ESPERA
-# =========================
-st.subheader("📊 Pacientes en espera")
-
-if len(cola.cola) == 0:
-    st.info("Sin pacientes en cola")
-else:
-    for i, paciente in enumerate(cola.cola, start=1):
-        st.write(
-            f"{i}. {paciente.get__nombre()} - {paciente.padecimiento}"
+    if st.session_state.paciente_actual:
+        st.metric(
+            "Consultorio",
+            st.session_state.paciente_actual.medico.consultorio
         )
+
+# ==========================
+# Paciente actual
+# ==========================
+
+st.subheader("👨‍⚕️ Paciente en Atención")
+
+if st.session_state.paciente_actual:
+
+    paciente = st.session_state.paciente_actual
+
+    c1, c2 = st.columns(2)
+
+    with c1:
+
+        st.info(
+            f"""
+            Nombre: {paciente.get__nombre()}
+
+            Edad: {paciente.get__edad()}
+
+            Padecimiento: {paciente.padecimiento}
+            """
+        )
+
+    with c2:
+
+        st.success(
+            f"""
+            Médico: {paciente.medico.get__nombre()}
+
+            Especialidad: {paciente.medico.especialidad}
+
+            {paciente.medico.consultorio}
+            """
+        )
+
+        st.metric(
+            "IMC",
+            round(
+                paciente.calcular_imc(),
+                2
+            )
+        )
+
+# ==========================
+# Sala de espera
+# ==========================
+
+st.subheader("🪑 Sala de Espera")
+
+if len(st.session_state.cola) > 0:
+
+    datos = []
+
+    for paciente in st.session_state.cola:
+
+        datos.append({
+            "Paciente": paciente.get__nombre(),
+            "Padecimiento": paciente.padecimiento,
+            "Médico": paciente.medico.get__nombre()
+        })
+
+    st.dataframe(
+        pd.DataFrame(datos),
+        use_container_width=True
+    )
+
+else:
+
+    st.success(
+        "Todos los pacientes fueron atendidos."
+    )
+
+# ==========================
+# Historial
+# ==========================
+
+st.subheader("✅ Historial de Atención")
+
+st.write(st.session_state.atendidos)
