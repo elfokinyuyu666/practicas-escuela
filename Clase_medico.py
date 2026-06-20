@@ -2,10 +2,10 @@ from Clase_persona import Persona
 
 class Medico(Persona):
 
-    def _init_(self, nombre, edad, sexo, telefono, correo,
+    def __init__(self, nombre, edad, sexo, telefono, correo,
                  especialidad, consultorio, num_empleado):
 
-        super()._init_()
+        super().__init__()
 
         self.set__nombre(nombre)
         self.set__edad(edad)
@@ -18,13 +18,15 @@ class Medico(Persona):
         self.num_empleado = num_empleado
 
     def mostrar_datos(self):
-        return {
-            "Nombre": self.get__nombre(),
-            "Edad": self.get__edad(),
-            "Sexo": self.get__sexo(),
-            "Telefono": self.get__telefono(),
-            "Correo": self.get__correo(),
-            "Especialidad": self.especialidad,
+        print("===== DATOS DEL MÉDICO =====")
+        print("Nombre:", self.get__nombre())
+        print("Edad:", self.get__edad())
+        print("Sexo:", self.get__sexo())
+        print("Teléfono:", self.get__telefono())
+        print("Correo:", self.get__correo())
+        print("Especialidad:", self.especialidad)
+        print("Consultorio:", self.consultorio)
+        print("Número de empleado:", self.num_empleado)
             "Consultorio": self.consultorio,
             "Numero Empleado": self.num_empleado
         }
