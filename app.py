@@ -54,13 +54,13 @@ if "cola" not in st.session_state:
 # BOTONES
 # -------------------------
 
-colb1, colb2 = st.columns(2)
+col1, col2 = st.columns(2)
 
-with colb1:
+with col1:
     if st.button("▶️ Iniciar simulación"):
         st.session_state.simulacion = True
 
-with colb2:
+with col2:
     if st.button("🔄 Reiniciar simulación"):
         st.session_state.cola = inicializar()
         st.session_state.atendidos = []
@@ -107,7 +107,7 @@ col3.metric("🏥 Consultorio", consultorio)
 
 
 # -------------------------
-# PACIENTE ACTUAL (CORREGIDO VISUALMENTE)
+# PACIENTE ACTUAL (MEJORADO VISUALMENTE)
 # -------------------------
 
 st.subheader("👨‍⚕️ Paciente en atención")
@@ -115,36 +115,47 @@ st.subheader("👨‍⚕️ Paciente en atención")
 if st.session_state.actual:
 
     p = st.session_state.actual
+    imc = p.calcular_imc()
 
     st.markdown(
         f"""
         <div style="
-            background: linear-gradient(135deg, #1f2937, #111827);
+            background: linear-gradient(135deg, #0f172a, #1e293b);
             padding: 25px;
-            border-radius: 15px;
+            border-radius: 18px;
             border-left: 6px solid #3b82f6;
             color: white;
-            box-shadow: 0px 4px 12px rgba(0,0,0,0.3);
+            box-shadow: 0px 6px 18px rgba(0,0,0,0.4);
         ">
+
             <h2 style="margin:0; color:#60a5fa;">
                 🧑‍⚕️ {p.get__nombre()}
             </h2>
 
-            <hr style="border: 0.5px solid #374151;">
+            <hr style="border: 0.5px solid #334155;">
 
-            <p><b>🦠 Padecimiento:</b> {p.padecimiento}</p>
-            <p><b>👨‍⚕️ Médico:</b> {p.medico.get__nombre()}</p>
-            <p><b>🏥 Consultorio:</b> {p.medico.consultorio}</p>
-            <p><b>📞 Teléfono:</b> {p.get__telefono()}</p>
-            <p><b>📧 Correo:</b> {p.get__correo()}</p>
-            <p><b>⚖️ Peso:</b> {p.peso} kg</p>
-            <p><b>📏 Altura:</b> {p.altura} m</p>
+            <p>🦠 <b>Padecimiento:</b> {p.padecimiento}</p>
+            <p>👨‍⚕️ <b>Médico:</b> {p.medico.get__nombre()}</p>
+            <p>🏥 <b>Consultorio:</b> {p.medico.consultorio}</p>
+
+            <div style="margin-top:10px;">
+                📞 <b>Teléfono:</b> {p.get__telefono()}<br>
+                📧 <b>Correo:</b> {p.get__correo()}<br>
+                ⚖️ <b>Peso:</b> {p.peso} kg<br>
+                📏 <b>Altura:</b> {p.altura} m
+            </div>
+
         </div>
         """,
         unsafe_allow_html=True
     )
 
-    st.success(f"📊 IMC: {round(p.calcular_imc(), 2)}")
+    st.success(f"📊 IMC: {round(imc, 2)}")
+
+    if imc > 30:
+        st.error("⚠️ IMC alto (obesidad)")
+    elif imc > 25:
+        st.warning("⚠️ Sobrepeso")
 
 else:
     st.info("No hay paciente en atención")
