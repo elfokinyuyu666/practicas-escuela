@@ -11,7 +11,7 @@ st.set_page_config(page_title="Consultorio", page_icon="🏥", layout="wide")
 st.title("🏥 Simulación de Consultorio Médico")
 
 # -------------------------
-# INICIALIZACIÓN
+# FUNCION DE INICIALIZACION
 # -------------------------
 
 def inicializar():
@@ -107,7 +107,7 @@ col3.metric("🏥 Consultorio", consultorio)
 
 
 # -------------------------
-# PACIENTE ACTUAL (MEJORADO VISUALMENTE)
+# PACIENTE EN ATENCIÓN (CORREGIDO SIN HTML)
 # -------------------------
 
 st.subheader("👨‍⚕️ Paciente en atención")
@@ -117,45 +117,33 @@ if st.session_state.actual:
     p = st.session_state.actual
     imc = p.calcular_imc()
 
-    st.markdown(
-        f"""
-        <div style="
-            background: linear-gradient(135deg, #0f172a, #1e293b);
-            padding: 25px;
-            border-radius: 18px;
-            border-left: 6px solid #3b82f6;
-            color: white;
-            box-shadow: 0px 6px 18px rgba(0,0,0,0.4);
-        ">
+    colA, colB = st.columns([1, 2])
 
-            <h2 style="margin:0; color:#60a5fa;">
-                🧑‍⚕️ {p.get__nombre()}
-            </h2>
+    with colA:
+        st.markdown("### 🧑‍⚕️ Datos del paciente")
+        st.markdown(f"**Nombre:** {p.get__nombre()}")
+        st.markdown(f"**Edad:** {p.get__edad()}")
+        st.markdown(f"**Sexo:** {p.get__sexo()}")
 
-            <hr style="border: 0.5px solid #334155;">
+        st.metric("📊 IMC", round(imc, 2))
 
-            <p>🦠 <b>Padecimiento:</b> {p.padecimiento}</p>
-            <p>👨‍⚕️ <b>Médico:</b> {p.medico.get__nombre()}</p>
-            <p>🏥 <b>Consultorio:</b> {p.medico.consultorio}</p>
+        if imc > 30:
+            st.error("⚠️ Obesidad")
+        elif imc > 25:
+            st.warning("⚠️ Sobrepeso")
+        else:
+            st.success("✔ Normal")
 
-            <div style="margin-top:10px;">
-                📞 <b>Teléfono:</b> {p.get__telefono()}<br>
-                📧 <b>Correo:</b> {p.get__correo()}<br>
-                ⚖️ <b>Peso:</b> {p.peso} kg<br>
-                📏 <b>Altura:</b> {p.altura} m
-            </div>
+    with colB:
+        st.markdown("### 🏥 Información médica")
+        st.markdown(f"**Padecimiento:** {p.padecimiento}")
+        st.markdown(f"**Médico:** {p.medico.get__nombre()}")
+        st.markdown(f"**Especialidad:** {p.medico.especialidad}")
+        st.markdown(f"**Consultorio:** {p.medico.consultorio}")
 
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-
-    st.success(f"📊 IMC: {round(imc, 2)}")
-
-    if imc > 30:
-        st.error("⚠️ IMC alto (obesidad)")
-    elif imc > 25:
-        st.warning("⚠️ Sobrepeso")
+        st.markdown("### 📞 Contacto")
+        st.markdown(f"- Tel: {p.get__telefono()}")
+        st.markdown(f"- Correo: {p.get__correo()}")
 
 else:
     st.info("No hay paciente en atención")
