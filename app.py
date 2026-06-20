@@ -71,7 +71,7 @@ with colb2:
 
 
 # -------------------------
-# SIMULACIÓN AUTOMÁTICA (NO BLOQUEANTE)
+# SIMULACIÓN AUTOMÁTICA
 # -------------------------
 
 if st.session_state.simulacion:
@@ -89,7 +89,7 @@ if st.session_state.simulacion:
 
 
 # -------------------------
-# UI
+# DASHBOARD
 # -------------------------
 
 st.divider()
@@ -107,7 +107,7 @@ col3.metric("🏥 Consultorio", consultorio)
 
 
 # -------------------------
-# PACIENTE ACTUAL
+# PACIENTE ACTUAL (CORREGIDO VISUALMENTE)
 # -------------------------
 
 st.subheader("👨‍⚕️ Paciente en atención")
@@ -119,15 +119,26 @@ if st.session_state.actual:
     st.markdown(
         f"""
         <div style="
-            background-color:#F8F9F9;
-            padding:20px;
-            border-radius:15px;
-            border-left:6px solid #2E86C1;
+            background: linear-gradient(135deg, #1f2937, #111827);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 6px solid #3b82f6;
+            color: white;
+            box-shadow: 0px 4px 12px rgba(0,0,0,0.3);
         ">
-            <h3>{p.get__nombre()}</h3>
-            <p><b>Padecimiento:</b> {p.padecimiento}</p>
-            <p><b>Médico:</b> {p.medico.get__nombre()}</p>
-            <p><b>Consultorio:</b> {p.medico.consultorio}</p>
+            <h2 style="margin:0; color:#60a5fa;">
+                🧑‍⚕️ {p.get__nombre()}
+            </h2>
+
+            <hr style="border: 0.5px solid #374151;">
+
+            <p><b>🦠 Padecimiento:</b> {p.padecimiento}</p>
+            <p><b>👨‍⚕️ Médico:</b> {p.medico.get__nombre()}</p>
+            <p><b>🏥 Consultorio:</b> {p.medico.consultorio}</p>
+            <p><b>📞 Teléfono:</b> {p.get__telefono()}</p>
+            <p><b>📧 Correo:</b> {p.get__correo()}</p>
+            <p><b>⚖️ Peso:</b> {p.peso} kg</p>
+            <p><b>📏 Altura:</b> {p.altura} m</p>
         </div>
         """,
         unsafe_allow_html=True
