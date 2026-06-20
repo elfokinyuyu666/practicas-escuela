@@ -8,13 +8,18 @@ from cola import ColaConsultorio
 
 st.set_page_config(page_title="Consultorio", page_icon="🏥", layout="wide")
 
-st.title("🏥 Simulación de Consultorio Médico")
+st.markdown(
+    "<h1 style='text-align:center;color:#2E86C1;'>🏥 Consultorio Médico</h1>",
+    unsafe_allow_html=True
+)
+
+st.divider()
 
 # -------------------------
-# Estado inicial
+# INICIALIZACIÓN
 # -------------------------
 
-if "init" not in st.session_state:
+if "cola" not in st.session_state:
 
     medicos = [
         Medico("Dr. Carlos Hernández", 45, "M", "3323", "a@a.com", "General", "1", "M1"),
@@ -38,40 +43,58 @@ if "init" not in st.session_state:
     st.session_state.cola = cola
     st.session_state.actual = None
     st.session_state.atendidos = []
-    st.session_state.last = time.time()
-    st.session_state.init = True
+
+    # control de simulación
+    st.session_state.simulacion = False
+    st.session_state.last_time = time.time()
 
 # -------------------------
-# AUTO SIMULACIÓN
+# BOTÓN DE INICIO
 # -------------------------
 
-if time.time() - st.session_state.last > 4:
+if not st.session_state.simulacion:
 
-    paciente = st.session_state.cola.atender_paciente()
+    if st.button("▶️ Iniciar simulación"):
 
-    if paciente:
-        st.session_state.actual = paciente
-        st.session_state.atendidos.append(paciente.get__nombre())
-
-    st.session_state.last = time.time()
-    st.rerun()
+        st.session_state.simulacion = True
+        st.rerun()
 
 # -------------------------
-# UI
+# SIMULACIÓN AUTOMÁTICA
+# -------------------------
+
+if st.session_state.simulacion:
+
+    if time.time() - st.session_state.last_time > 4:
+
+        paciente = st.session_state.cola.atender_paciente()
+
+        if paciente:
+            st.session_state.actual = paciente
+            st.session_state.atendidos.append(paciente.get__nombre())
+
+        st.session_state.last_time = time.time()
+        st.rerun()
+
+# -------------------------
+# DASHBOARD
 # -------------------------
 
 col1, col2, col3 = st.columns(3)
 
-col1.metric("En espera", len(st.session_state.cola.cola))
-col2.metric("Atendidos", len(st.session_state.atendidos))
+col1.metric("⏳ En espera", len(st.session_state.cola.cola))
+col2.metric("✅ Atendidos", len(st.session_state.atendidos))
 
+consultorio = "-"
 if st.session_state.actual:
-    col3.metric("Consultorio", st.session_state.actual.medico.consultorio)
+    consultorio = st.session_state.actual.medico.consultorio
+
+col3.metric("🏥 Consultorio", consultorio)
 
 st.divider()
 
 # -------------------------
-# Paciente actual
+# PACIENTE ACTUAL
 # -------------------------
 
 st.subheader("👨‍⚕️ Paciente en atención")
@@ -80,27 +103,40 @@ if st.session_state.actual:
 
     p = st.session_state.actual
 
-    st.info(f"""
-    Nombre: {p.get__nombre()}
-    Padecimiento: {p.padecimiento}
-    Médico: {p.medico.get__nombre()}
-    """)
+    st.markdown(
+        f"""
+        <div style="
+            background-color:#F8F9F9;
+            padding:20px;
+            border-radius:15px;
+            border-left:6px solid #2E86C1;
+        ">
+            <h3>{p.get__nombre()}</h3>
+            <p><b>Padecimiento:</b> {p.padecimiento}</p>
+            <p><b>Médico:</b> {p.medico.get__nombre()}</p>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
-    st.success(f"IMC: {round(p.calcular_imc(), 2)}")
+    st.success(f"📊 IMC: {round(p.calcular_imc(), 2)}")
+
+else:
+    st.info("Aún no hay paciente en atención")
 
 # -------------------------
-# Cola
+# SALA DE ESPERA
 # -------------------------
 
 st.subheader("🪑 Sala de espera")
 
 for p in st.session_state.cola.cola:
-    st.write(f"• {p.get__nombre()} - {p.padecimiento}")
+    st.write(f"🧑‍⚕️ {p.get__nombre()} — {p.padecimiento}")
 
 # -------------------------
-# Historial
+# HISTORIAL
 # -------------------------
 
-st.subheader("✅ Atendidos")
+st.subheader("📋 Atendidos")
 
 st.write(st.session_state.atendidos)
